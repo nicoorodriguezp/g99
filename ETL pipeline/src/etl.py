@@ -9,7 +9,7 @@ import pathlib
 
 import pandas as pd
 # this is imported from config folder
-#import config.email as eml
+
 import os
 from os import remove
 
@@ -37,6 +37,17 @@ def extract(path):
     try:
         # starting directory
         directory = path
+        headCharge = ['chargebacks_id','payment_date','debit_date','currency_code','token_customer','amount','is_fraud']
+        headPayment = ['payment_id','currency_code','gateway_code','payment_method','payment_date','token_customer','is_credit','is_debit','amount']
+        
+        if directory == dir_payments:
+             tbl = "payments"
+             headname = headPayment
+        else:
+            if directory == dir_charges:
+             tbl = "chargebacks"
+             headname = headCharge
+                    
         # iterate over files in the directory
         for filename in os.listdir(directory):
             #get filename without ext
@@ -46,22 +57,19 @@ def extract(path):
                 f = os.path.join(directory, filename)
                 # checking if it is a file
                 if os.path.isfile(f):
+
                     #se tiene que agregar el seperador porque no es la coma
-                    df = pd.read_csv(f,sep = ';')
+                    df = pd.read_csv(f,sep = ';',header=0, names = headname)
                     print (df)
+            
+                    print("#Cargando archvo: " + filename)
                     
                     # call to load
                     #load(df, file_wo_ext) //carga datos en la tabla con nombre del archivo
-                    print("#Cargando archvo: " + filename)
-                    if path == dir_payments:
-                        tbl = "payments"
-                    else:
-                        if path == dir_charges:
-                            tbl = "chargebacks"
                     load(df, tbl)
-                    #a_eliminar.append(filename)
+                    """""
                     os.unlink(f)
-                    print("Se elimino el archivo: " + filename + " despues de procesar.")
+                    print("Se elimino el archivo: " + filename + " despues de procesar.")"""
     except Exception as e:
         print("Error mientras extracción de datos: " + str(e))
 
