@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS tiempo_dim (
-   id_tiempo int8  PRIMARY KEY,
+   id_tiempo SERIAL PRIMARY KEY,
    fecha int8,
    anio int8,
    mes int8,
@@ -12,18 +12,22 @@ CREATE TABLE IF NOT EXISTS divisa_dim (
    currency_code varchar(3)
 );
 
-/* # insertar en la dimension los valores de las tablas Stagign#
+/* #insertar en la dimension los valores de las tablas Stagign#
 insert into divisa_dim (currency_code) 
    select distinct c.currency_code from public.stg_chargebacks c union select distinct p.currency_code from public.stg_payments p; */
 
 
 CREATE TABLE IF NOT EXISTS gateway_dim (
-   id_gateway int8  PRIMARY KEY,
+   id_gateway SERIAL PRIMARY KEY,
    gateway_code varchar(20)
 );
 
+/* #insertar en la dimension los valores de las tablas Stagign#
+insert into gateway_dim (gateway_code) 
+   select distinct c.gateway_code from public.stg_chargebacks c union select distinct p.gateway_code from public.stg_payments p; */
+
 CREATE TABLE IF NOT EXISTS metodoPago_dim (
-   id_paymentMethod int8 PRIMARY KEY,
+   id_paymentMethod SERIAL PRIMARY KEY,
    payment_method varchar(20)
 );
 
