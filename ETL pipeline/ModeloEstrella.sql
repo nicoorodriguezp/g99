@@ -12,9 +12,10 @@ CREATE TABLE IF NOT EXISTS divisa_dim (
    currency_code varchar(3)
 );
 
-/* #insertar en la dimension los valores de las tablas Stagign#
+-- #insertar en la dimension los valores de las tablas Stagign#
 insert into divisa_dim (currency_code) 
-   select distinct c.currency_code from public.stg_chargebacks c union select distinct p.currency_code from public.stg_payments p; */
+   select distinct c.currency_code from public.stg_chargebacks c union select distinct p.currency_code from public.stg_payments p 
+   where p.gateway_code is not null; 
 
 
 CREATE TABLE IF NOT EXISTS gateway_dim (
@@ -22,14 +23,20 @@ CREATE TABLE IF NOT EXISTS gateway_dim (
    gateway_code varchar(20)
 );
 
-/* #insertar en la dimension los valores de las tablas Stagign#
+-- #insertar en la dimension los valores de las tablas Stagign#
 insert into gateway_dim (gateway_code) 
-   select distinct c.gateway_code from public.stg_chargebacks c union select distinct p.gateway_code from public.stg_payments p; */
+   select distinct p.gateway_code from public.stg_payments p
+   where p.gateway_code is not null; 
 
 CREATE TABLE IF NOT EXISTS metodoPago_dim (
    id_paymentMethod SERIAL PRIMARY KEY,
    payment_method varchar(20)
 );
+
+-- #insertar en la dimension los valores de las tablas Stagign#
+insert into metodoPago_dim (payment_method) 
+   select distinct p.payment_method from public.stg_payments p
+   where p.payment_method is not null; 
 
 -- Creation table payments 
    CREATE TABLE IF NOT EXISTS Fact_payments (
