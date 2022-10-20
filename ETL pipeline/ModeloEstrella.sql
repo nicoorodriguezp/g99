@@ -1,4 +1,4 @@
-CREATE TABLE tiempo_dim (
+CREATE TABLE IF NOT EXISTS tiempo_dim (
    id_tiempo int8  PRIMARY KEY,
    fecha int8,
    anio int8,
@@ -7,7 +7,7 @@ CREATE TABLE tiempo_dim (
    dia_semana varchar(20)
 );
 
-CREATE TABLE divisa_dim (
+CREATE TABLE IF NOT EXISTS divisa_dim (
    id_currency SERIAL PRIMARY KEY,
    currency_code varchar(3)
 );
@@ -17,18 +17,18 @@ insert into divisa_dim (currency_code)
    select distinct c.currency_code from public.stg_chargebacks c union select distinct p.currency_code from public.stg_payments p; */
 
 
-CREATE TABLE gateway_dim (
+CREATE TABLE IF NOT EXISTS gateway_dim (
    id_gateway int8  PRIMARY KEY,
    gateway_code varchar(20)
 );
 
-CREATE TABLE metodoPago_dim (
+CREATE TABLE IF NOT EXISTS metodoPago_dim (
    id_paymentMethod int8 PRIMARY KEY,
    payment_method varchar(20)
 );
 
 -- Creation table payments 
-   CREATE TABLE Fact_payments (
+   CREATE TABLE IF NOT EXISTS Fact_payments (
    payment_id int8 PRIMARY KEY,
    currency_code int8,
    gateway_code int8,
@@ -45,7 +45,7 @@ CREATE TABLE metodoPago_dim (
 );
 
 -- Creation table chargebacks
-CREATE TABLE Fact_chargebacks (
+CREATE TABLE IF NOT EXISTS Fact_chargebacks (
    chargebacks_id int8 PRIMARY KEY,
    payment_date int8,
    notification_date int8,
