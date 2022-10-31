@@ -37,7 +37,7 @@ def extract(path):
     try:
         # starting directory
         directory = path
-        headCharge = ['chargebacks_id','payment_date','debit_date','currency_code','token_customer','amount','is_fraud']
+        headCharge = ['chargebacks_id','payment_date','notification_date','debit_date','currency_code','token_customer','amount','is_fraud']
         headPayment = ['payment_id','currency_code','gateway_code','payment_method','payment_date','token_customer','is_credit','is_debit','amount']
         
         if directory == dir_payments:
@@ -59,7 +59,7 @@ def extract(path):
                 if os.path.isfile(f):
 
                     #se tiene que agregar el seperador porque no es la coma
-                    df = pd.read_csv(f,sep = ';',header=0, names = headname)
+                    df = pd.read_csv(f,sep = ';', names = headname)
                     print (df)
             
                     print("#Cargando archvo: " + filename)
@@ -82,8 +82,8 @@ def load(df, tbl):
         print(f'importar fila {rows_imported} a {rows_imported + len(df)}... ')
         
         # save df to postgres
-        #df.to_sql(f"stg_{tbl}", engine, if_exists='replace', index=False) #creado nueva tabla con prefijo stg >>staging
-        df.to_sql(tbl, engine, if_exists='replace', index=False)  #cargar en tabla >> resultado no esperado sobre escribe tipo de datos
+        df.to_sql(f"stg_{tbl}", engine, if_exists='append', index=False) #creado nueva tabla con prefijo stg >>staging
+        #df.to_sql(tbl, engine, if_exists='replace', index=False)  #cargar en tabla >> resultado no esperado sobre escribe tipo de datos
         rows_imported += len(df)
 
         # add elapsed time to final print out
